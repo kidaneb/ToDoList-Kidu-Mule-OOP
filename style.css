@@ -1,0 +1,366 @@
+body {
+  height: 100vh;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: aliceblue;
+  height: 700px;
+  width: 700px;
+
+  text-align: center;
+  z-index: 10;
+}
+.main-title {
+  font-size: 32px;
+  margin: 5px;
+}
+.input-container {
+  height: 20%;
+  width: 90%;
+  /* border: 1px solid red; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+}
+.input-container .input-field {
+  height: 40px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  background-color: transparent;
+  font-size: 20px;
+  color: aliceblue;
+  margin: 4px;
+  padding: 10px;
+  scroll-behavior: smooth;
+}
+.input-container button {
+  border: 1px solid grey;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 4px;
+  font-size: 20px;
+}
+.todo-item-container {
+  height: 70%;
+  width: 90%;
+  /* border: 3px solid red; */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+}
+.todo-item-container .todo-item {
+  height: 40%;
+  width: 96%;
+
+  margin: 5px;
+  display: flex;
+  justify-content: space-evenly;
+  transition: transform 0.6s ease;
+}
+.todo-item-container .todo-item:hover {
+  transform: scale(1.035);
+  border: 1px solid grey;
+  border-radius: 5px;
+}
+.todo-item-container .todo-item .todo-description {
+  height: 87%;
+  width: 65%;
+  /* border: 3px solid red; */
+  border-radius: 5px;
+  font-size: larger;
+  padding: 10px;
+  overflow-y: scroll;
+  text-align: justify;
+  transition: transform 0.2s ease;
+}
+.completed {
+  text-decoration: line-through;
+}
+/* .todo-item-container .todo-item .todo-description:hover{
+    transform: scale(1.02);
+} */
+.todo-item-container .todo-item .todo-action {
+  height: 100%;
+  width: 30%;
+  /* border: 3px solid red; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+.todo-item-container .todo-item .todo-action button {
+  height: 30%;
+  width: 90%;
+  margin: 4px;
+  padding: 10px;
+  font-size: 20px;
+
+  background-color: transparent;
+  color: aliceblue;
+  cursor: pointer;
+}
+.todo-item-container .todo-item .todo-action .complete {
+  border: 1px solid cyan;
+  border-radius: 5px;
+  transition: transform 0.5s ease;
+}
+.todo-item-container .todo-item .todo-action .complete:hover {
+  transform: scale(1.03);
+}
+.todo-item-container .todo-item .todo-action .remove {
+  border: 1px solid red;
+  border-radius: 5px;
+  transition: transform 0.5s ease;
+}
+.todo-item-container .todo-item .todo-action .remove:hover {
+  background-color: rgba(255, 0, 0, 0.582);
+  transform: scale(1.03);
+}
+.todo-item-container .todo-item .todo-action .edit {
+  border: 1px solid rgb(255, 157, 0);
+  border-radius: 5px;
+  transition: transform 0.5s ease;
+}
+.todo-item-container .todo-item .todo-action .edit:hover {
+  background-color: rgba(223, 143, 22, 0.582);
+  transform: scale(1.03);
+}
+/* FOR DIALOGUE BOX */
+.dialogue {
+  height: 300px;
+  width: 600px;
+  border: 1px solid grey;
+  border-radius: 10px;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  z-index: 1;
+}
+.dialogue .close {
+  align-self: start;
+  margin: 3px;
+  height: 40px;
+  width: 40px;
+  border: 1px solid red;
+  border-radius: 50%;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dialogue .close .material-symbols-outlined {
+  font-weight: bolder;
+  color: red;
+}
+.dialogue .title {
+  color: aliceblue;
+  height: 15%;
+  width: 90%;
+  /* border: 1px solid red; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+}
+.dialogue .body {
+  color: aliceblue;
+  height: 50%;
+  width: 90%;
+  /* border: 1px solid red; */
+  text-align: center;
+}
+.dialogue .button-container {
+  height: 20%;
+  width: 90%;
+  /* border: 1px solid red; */
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 7px;
+}
+.dialogue .button-container .accept {
+  height: 60%;
+  width: 20%;
+  font-size: 20px;
+  font-weight: 500;
+  border: 1px solid cyan;
+  border-radius: 5px;
+  background-color: transparent;
+  color: aliceblue;
+  margin-right: 5px;
+}
+.dialogue .button-container .cancel {
+  height: 60%;
+  width: 20%;
+  font-size: 20px;
+  font-weight: 500;
+  border: 1px solid red;
+  border-radius: 5px;
+  background-color: transparent;
+  color: aliceblue;
+}
+
+.dialogue {
+  height: 300px;
+  width: 600px;
+  border: 1px solid grey;
+  border-radius: 10px;
+  background-color: transparent;
+  position: absolute;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  z-index: 5;
+}
+.dialogue .close {
+  align-self: start;
+  margin: 3px;
+  height: 40px;
+  width: 40px;
+  border: 1px solid red;
+  border-radius: 50%;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dialogue .close .material-symbols-outlined {
+  font-weight: bolder;
+  color: red;
+}
+.dialogue .title {
+  color: aliceblue;
+  height: 15%;
+  width: 90%;
+  /* border: 1px solid red; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+}
+.dialogue .body {
+  color: aliceblue;
+  height: 50%;
+  width: 90%;
+  /* border: 1px solid red; */
+  text-align: center;
+}
+.dialogue .button-container {
+  height: 20%;
+  width: 90%;
+  /* border: 1px solid red; */
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 7px;
+}
+.dialogue .button-container .accept {
+  height: 60%;
+  width: 20%;
+  font-size: 20px;
+  font-weight: 500;
+  border: 1px solid cyan;
+  border-radius: 5px;
+  background-color: transparent;
+  color: aliceblue;
+  margin-right: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.dialogue .button-container .cancel {
+  height: 60%;
+  width: 20%;
+  font-size: 20px;
+  font-weight: 500;
+  border: 1px solid red;
+  border-radius: 5px;
+  background-color: transparent;
+  color: aliceblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* FOR EDIT WINDOW */
+.edit-box {
+  height: 300px;
+  width: 600px;
+  border: 1px solid grey;
+  border-radius: 10px;
+  position: absolute;
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 5;
+}
+.edit-box .edit-close-button {
+  align-self: flex-start;
+  margin: 3px;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  border: 1px solid grey;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.edit-box .edit-input-container {
+  height: 60%;
+  width: 90%;
+  /* border: 1px solid red; */
+}
+.edit-input-container .edit-input {
+  resize: none;
+  height: 100%;
+  width: 98%;
+  border-radius: 10px;
+  background-color: transparent;
+  border: 1px solid grey;
+  font-size: 16px;
+  color: aliceblue;
+  overflow-y: scroll;
+  overflow-x: auto;
+}
+.edit-box .save-button-container {
+  height: 20%;
+  width: 90%;
+  /* border: 1px solid red; */
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+.save-button-container .save-button {
+  height: 40px;
+  width: 100px;
+  border-radius: 5px;
+  border: 1px solid cyan;
+  font-size: larger;
+  color: aliceblue;
+  background-color: transparent;
+  margin: 10px;
+}
+.background {
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+  position: absolute;
+  z-index: 0;
+}
