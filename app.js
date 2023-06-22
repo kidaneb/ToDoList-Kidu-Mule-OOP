@@ -7,6 +7,7 @@ if (localStorage.getItem("id") == null || undefined) {
   id = JSON.parse(localStorage.getItem("id"));
 }
 let todos;
+let object_pool = [];
 if (localStorage.getItem("todos") == null || undefined) {
   todos = [];
 } else {
@@ -29,12 +30,14 @@ class InputManager {
       this.addTodo();
     });
   }
-  
+
   addTodo() {
     if (this.validateInput(this.todoInputDescription.value)) {
-      let newTodo = new Todo(this.todoInputDescription.value);
+      let newTodo = new Todo(this.todoInputDescription.value, false, id);
+      id++;
       this.todoInputDescription.value = "";
       todos.push(newTodo);
+      object_pool.push(newTodo);
       localStorage.setItem("todos", JSON.stringify(todos));
 
       console.log(todos);
@@ -62,56 +65,54 @@ class InputManager {
 
 class Todo {
   // TODO OBJECT PROPERTIES
-  constructor(description) {
+  constructor(description, complete, id) {
     this.description = description;
-    this.complete = false;
+    this.complete = complete;
     this.id = id;
-    id++;
+
     localStorage.setItem("id", JSON.stringify(id));
 
-    Todo.createtodoItemElement(this);
+    this.createtodoItemElement();
   }
-
   //CREAT TODO UI ELEMENTS AND PUT ON THE LOCAL STORAGE
-
-  static createtodoItemElement(todo) {
+  createtodoItemElement() {
     const todoItem = document.createElement("div");
     todoItem.className = "todo-item";
-    todoItem.id = `todo-item-${todo.id}`;
+    todoItem.id = `todo-item-${this.id}`;
 
     const todoDescription = document.createElement("div");
     todoDescription.className = "todo-description";
-    if (todo.complete) {
+    if (this.complete) {
       todoDescription.classList.add("completed");
     }
-    todoDescription.id = `todo-description-${todo.id}`;
-    todoDescription.innerHTML = todo.description;
+    todoDescription.id = `todo-description-${this.id}`;
+    todoDescription.innerHTML = this.description;
 
     const todoAction = document.createElement("div");
     todoAction.className = "todo-action";
-    todoAction.id = `todo-action-${todo.id}`;
+    todoAction.id = `todo-action-${this.id}`;
 
     const completeButton = document.createElement("button");
     completeButton.className = "complete";
-    completeButton.id = `complete-${todo.id}`;
+    completeButton.id = `complete-${this.id}`;
     completeButton.innerHTML = "Complete";
-    completeButton.addEventListener("click", () => Todo.completeTodo(todo.id));
+    completeButton.addEventListener("click", () => this.completeTodo());
 
     const editButton = document.createElement("button");
     editButton.className = "edit";
-    editButton.id = `edit-${todo.id}`;
+    editButton.id = `edit-${this.id}`;
     editButton.innerHTML = "Edit";
     editButton.addEventListener("click", () => {
-      activeId = todo.id;
-      DialogueSystem.displayEditBox(todo.description);
+      activeId = this.id;
+      DialogueSystem.displayEditBox(this.description);
     });
 
     const removeButton = document.createElement("button");
     removeButton.className = "remove";
-    removeButton.id = `remove-${todo.id}`;
+    removeButton.id = `remove-${this.id}`;
     removeButton.innerHTML = "Remove";
     removeButton.addEventListener("click", () => {
-      activeId = todo.id;
+      activeId = this.id;
       DialogueSystem.displayDialogueBox(
         "Delete Button clicked",
         "Are you sure you want to delete this todo?",
@@ -136,53 +137,60 @@ class Todo {
       );
   }
   //COMPLETE STATUS FUNCTION
-  static completeTodo(id) {
+  completeTodo() {
     todos.forEach((todo) => {
-      if (todo.id === id) {
+      if (todo.id === this.id) {
         todo.complete = !todo.complete;
       }
     });
     localStorage.setItem("todos", JSON.stringify(todos));
 
     document
-      .getElementById(`todo-description-${id}`)
+      .getElementById(`todo-description-${this.id}`)
       .classList.toggle("completed");
   }
   //REMOVE BUTTON FUNCTION
-  static removeTodo(id) {
+  removeTodo() {
     todos.forEach((todo, index) => {
-      if (todo.id === id) {
+      if (todo.id === this.id) {
         todos.splice(index, 1);
       }
     });
     localStorage.setItem("todos", JSON.stringify(todos));
-    document.getElementById(`todo-item-${id}`).remove();
-    DialogueSystem.closeDialogueBox();
+    document.getElementById(`todo-item-${this.id}`).remove();
+    // DialogueSystem.closeDialogueBox();
     console.log("1");
   }
   //EDIT BUTTON FUNCTION
-  static saveEditedTodo(id) {
-    document.getElementById(`todo-description-${id}`).innerText =
-      editInput.value;
+  saveEditedTodo() {
+   
     DialogueSystem.closeEditBox();
+    todos.forEach((todo,index) => {
+      if(todo.id === this.id){
+        todo.description = editInput.value; 
+      }
+    })
+    localStorage.setItem('todos', JSON.stringify(todos));
+    document.getElementById(`todo-description-${this.id}`).innerText =
+    editInput.value;
   }
   // DELETE ANIMATION FUNCTION
-  static deleteAnimation(id) {
-    pos += 5;
+  deleteAnimation() {
+    pos += 10;
 
-    if (pos < 920) {
+    if (pos < 1240) {
       document.getElementById(
-        `todo-item-${id}`
+        `todo-item-${this.id}`
       ).style.transform = `translateX(${pos}px)`;
 
       setTimeout(
-        requestAnimationFrame(() => Todo.deleteAnimation(id)),
-        1000 / 100
+        requestAnimationFrame(() => this.deleteAnimation()),
+        1000 / 60
       );
 
       console.log(pos);
-    } else if (pos === 920) {
-      Todo.removeTodo(id);
+    } else if (pos === 1240) {
+      this.removeTodo(id);
       pos = 0;
       return;
     }
@@ -219,7 +227,11 @@ background.addEventListener("click", () => {
   }
 });
 saveButton.addEventListener("click", () => {
-  Todo.saveEditedTodo(activeId);
+  object_pool.forEach((newTodo) => {
+    if (newTodo.id === activeId) {
+      newTodo.saveEditedTodo(activeId);
+    }
+  });
 });
 editCloseButton.addEventListener("click", () => {
   DialogueSystem.closeEditBox();
@@ -228,7 +240,11 @@ acceptButton.addEventListener("click", () => {
   if (MODE === "DELETE_TODO") {
     //calls remove todo function
     DialogueSystem.closeDialogueBox();
-    Todo.deleteAnimation(activeId);
+    object_pool.forEach((newTodo) => {
+      if (newTodo.id === activeId) {
+        newTodo.deleteAnimation();
+      }
+    });
   } else if (MODE === "INPUT_ERROR") {
     // calls closedialogue function
     DialogueSystem.closeDialogueBox();
@@ -284,9 +300,11 @@ class DialogueSystem {
 }
 
 //########## APP SATRTS HERE  #############
-const newInput = new InputManager;
-todos.forEach((todo) => {
-  Todo.createtodoItemElement(todo);
-});
+const newInput = new InputManager();
 
-
+if (todos.length !== 0) {
+  todos.forEach((todo) => {
+    newTodo = new Todo(todo.description, todo.complete, todo.id);
+    object_pool.push(newTodo);
+  });
+}
